@@ -12,22 +12,18 @@ pipeline {
 		PROD_CONTAINER = 'prod_3834975y'
 		PROD_PORT = '32700'
 
-        CONTAINER_PORT = '80'
+        BOLT_SCRIPT = '/tmp/3834975Y/work/operate-repo-3834975Y/script_3834975Y'
     }
 
 	stages {
 		stage('Opr-S1-3834975Y') {
 			steps {
-				//sh '''#!/bin/bash
-				//targets=puppetclient2;
-				//locate_script='/tmp/clone/devops_repo/script_to_run';
-				//bolt script run $locate_script -t $targets -u clientadm -p user123 --no-host-key-check --run-as root;
-				//'''
-				//echo "Production container updated"
+				sh 'docker image rm -f bkup_uat_image'
+				sh 'docker commit uat_3834975y bkup_uat_image'
 
-
+				echo "Opr-S1-${MY_POLITEID}: bkup_uat_image created."
+				
 				echo "Opr-S1-${MY_POLITEID}: uat web server is backup and updated"
-				echo 'Opr-S1-${MY_POLITEID}: uat web server is backup and updated'
 			}
 		}
 

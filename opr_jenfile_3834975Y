@@ -24,7 +24,7 @@ pipeline {
 
 				sh '''#!/bin/bash
 				puppet resource file /tmp/3834975Y/work ensure=absent force=true;
-				puppet resource file /tmp/3834975Y/work ensure=directory;
+				puppet resource file /tmp/3834975Y/work ensure=directory recurse=true;
 				cd /tmp/3834975Y/work;
 				git clone https://github.com/wesley-if/operate-repo-3834975Y.git;
 				targets=uat_3834975y;

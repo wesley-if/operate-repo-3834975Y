@@ -1,1 +1,11 @@
 #!/bin/bash
+apt update
+puppet resource package apache2 ensure=present
+puppet resource service apache2 ensure=running
+
+puppet resource file /tmp/3834975Y/work ensure=absent force=true
+puppet resource file /tmp/3834975Y/work ensure=directory
+
+cd /tmp/3834975Y/work
+git clone https://github.com/wesley-if//tmp/3834975Y/work/tmp/3834975Y/work.git
+cp -p /tmp/3834975Y/work/operate-repo-3834975Y/index.html_3834975Y /var/www/html/index.html

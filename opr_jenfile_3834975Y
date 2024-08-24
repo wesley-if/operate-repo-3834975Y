@@ -19,10 +19,19 @@ pipeline {
 		stage('Opr-S1-3834975Y') {
 			steps {
 				sh 'docker image rm -f bkup_uat_image'
+
 				sh 'docker commit uat_3834975y bkup_uat_image'
 
-				echo "Opr-S1-${MY_POLITEID}: bkup_uat_image created."
-				
+				sh '''#!/bin/bash
+				puppet resource file /tmp/3834975Y/work ensure=absent force=true;
+				puppet resource file /tmp/3834975Y/work ensure=directory;
+				cd /tmp/3834975Y/work;
+				git clone https://github.com/wesley-if/operate-repo-3834975Y.git;
+				targets=uat_3834975y;
+				locate_script='/tmp/3834975Y/work/operate-repo-3834975Y/script_3834975Y';
+				bolt script run $locate_script -t $targets -u clientadm -p admin123 --no-host-key-check --run-as root;
+				'''
+
 				echo "Opr-S1-${MY_POLITEID}: uat web server is backup and updated"
 			}
 		}

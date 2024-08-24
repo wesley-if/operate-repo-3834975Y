@@ -1,0 +1,56 @@
+pipeline {
+	agent any
+
+	environment {
+        MY_POLITEID = '3834975Y'
+        DOCKER_IMAGE = '3834975y-image'
+        CONTAINER_NAME = '3834975Y-Server'
+        PORT_UAT = '32600'
+        PORT_PROD = '32700'
+        CONTAINER_PORT = '80'
+    }
+
+	stages {
+		stage('Opr-S1-3834975Y') {
+			steps {
+				echo "${MY_POLITEID}-Stage 1: Setup Release Environment Completed."
+			}
+		}
+		
+		stage('Opr-S2-3834975Y') {
+			steps {
+				echo "${MY_POLITEID}-Stage 2: Setup Release Environment Completed."
+			}
+		}
+		
+		stage('Opr-S3-3834975Y') {
+			steps {
+				echo "${MY_POLITEID}-Stage 3: Setup Release Environment Completed."
+			}
+		}
+		
+		stage('Opr-S4-3834975Y') {
+			steps {
+				echo "${MY_POLITEID}-Stage 4: Setup Release Environment Completed."
+			}
+		}
+		
+		stage('Opr-S5-3834975Y') {
+			steps {
+				echo "${MY_POLITEID}-Stage 5: Setup Release Environment Completed."
+			}
+		}
+		
+		stage('Opr-S6-3834975Y') {
+			steps {
+				echo "${MY_POLITEID}-Stage 6: Setup Release Environment Completed."
+			}
+		}
+		
+		stage('Opr-S7-3834975Y') {
+			steps {
+				echo "${MY_POLITEID}-Stage 7: Setup Release Environment Completed."
+			}
+		}
+	}
+}

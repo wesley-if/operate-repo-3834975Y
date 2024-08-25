@@ -3,16 +3,6 @@ pipeline {
 
 	environment {
         MY_POLITEID = '3834975Y'
-        DOCKER_IMAGE = '3834975y-image'
-        CONTAINER_NAME = '3834975Y-Server'
-
-		UAT_CONTAINER = 'uat_3834975y'
-		UAT_PORT = '32600'
-
-		PROD_CONTAINER = 'prod_3834975y'
-		PROD_PORT = '32700'
-
-        BOLT_SCRIPT = '/tmp/3834975Y/work/operate-repo-3834975Y/script_3834975Y'
     }
 
 	stages {
@@ -75,9 +65,6 @@ pipeline {
 
 			}
 		}
-
-
-
 
 		stage('Opr-S5-3834975Y') {
 			steps {

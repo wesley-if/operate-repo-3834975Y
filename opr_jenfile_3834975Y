@@ -42,11 +42,11 @@ pipeline {
 			steps {
 				sh '''#!/bin/bash
 				curl -Is http://localhost:32600 | head -n 1 > /tmp/uat-result-file;
-				status=`/tmp/uat-result-file`;
+				status=`cat /tmp/uat-result-file`;
 				if [[ "$status" == "HTTP/1.1 200 OK" ]]; then
-				   echo "Opr-S1-${MY_POLITEID}: uat svr is running after update";
+					echo "Opr-S2-${MY_POLITEID}: uat svr is running after update";
 				else
-				   echo "Opr-S1-${MY_POLITEID}: uat svr fails after update and is rolled back";
+					echo "Opr-S2-${MY_POLITEID}: uat svr fails after update and is rolled back";
 				fi
 				'''
 			}
@@ -62,11 +62,18 @@ pipeline {
 			}
 		}
 
-		stage('Opr-S4-3834975Y') {
-			steps {
-				echo "${MY_POLITEID}-Stage 4: Setup Release Environment Completed."
-			}
-		}
+
+
+
+stage('Opr-S4-3834975Y') {
+	steps {
+		echo "Opr-S4-${MY_POLITEID}: load test for uat web server is successful"
+
+	}
+}
+
+
+
 
 		stage('Opr-S5-3834975Y') {
 			steps {
@@ -86,4 +93,10 @@ pipeline {
 			}
 		}
 	}
+}
+
+
+// Reusable function to perform rollback
+def rollback() {
+	echo "${MY_POLITEID}-rolling back..."
 }

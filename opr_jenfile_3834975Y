@@ -43,7 +43,7 @@ pipeline {
 				sh '''#!/bin/bash
 				curl -Is http://localhost:32600 2>/dev/null | head -n 1 > /tmp/uat-result-file;
 				status=$(cat /tmp/uat-result-file);
-				if [[ "$status" == *"400"* ]]; then
+				if [[ "$status" == *"200"* ]]; then
 					echo "Opr-S2-${MY_POLITEID}: uat svr is running after update";
 				else
 					docker rm -f uat_3834975y;
@@ -56,44 +56,45 @@ pipeline {
 			}
 		}
 
-
-
-
-
 		stage('Opr-S3-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 3: Setup Release Environment Completed."
+				input('Proceed to generate load test report?')
+
+				echo "Opr-S3-${MY_POLITEID}: Proceed to generate load test report for uat web server"
 			}
 		}
 
+		stage('Opr-S4-3834975Y') {
+			when {
+				not {
+					branch "uat server is rolled back"
+				}
+			}
 
+			steps {
+				echo "Opr-S4-${MY_POLITEID}: load test for uat web server is successful"
 
-
-stage('Opr-S4-3834975Y') {
-	steps {
-		echo "Opr-S4-${MY_POLITEID}: load test for uat web server is successful"
-
-	}
-}
+			}
+		}
 
 
 
 
 		stage('Opr-S5-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 5: Setup Release Environment Completed."
+				echo "${MY_POLITEID}-Stage 5: xxxx"
 			}
 		}
 
 		stage('Opr-S6-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 6: Setup Release Environment Completed."
+				echo "${MY_POLITEID}-Stage 6: xxxx"
 			}
 		}
 
 		stage('Opr-S7-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 7: Setup Release Environment Completed."
+				echo "${MY_POLITEID}-Stage 7: xxxx"
 			}
 		}
 	}

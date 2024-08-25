@@ -18,6 +18,7 @@ pipeline {
 	stages {
 		stage('Opr-S1-3834975Y') {
 			steps {
+/* temp disable
 				sh 'docker image rm -f bkup_uat_image'
 
 				sh 'docker commit uat_3834975y bkup_uat_image'
@@ -32,7 +33,7 @@ pipeline {
 				locate_script='/tmp/3834975Y/work/operate-repo-3834975Y/script_3834975Y';
 				bolt script run $locate_script -t $targets -u clientadm -p admin123 --no-host-key-check --run-as root;
 				'''
-
+*/
 				echo "Opr-S1-${MY_POLITEID}: uat web server is backup and updated"
 			}
 		}
@@ -40,8 +41,6 @@ pipeline {
 		stage('Opr-S2-3834975Y') {
 			steps {
 				sh '''#!/bin/bash
-				whoami;
-				pwd;
 				curl -Is http://localhost:32600 | head -n 1 > /tmp/uat-result-file;
 				status=`/tmp/uat-result-file`;
 				if [[ "$status" == "HTTP/1.1 200 OK" ]]; then

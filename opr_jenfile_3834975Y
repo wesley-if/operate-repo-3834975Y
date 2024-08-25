@@ -40,12 +40,14 @@ pipeline {
 		stage('Opr-S2-3834975Y') {
 			steps {
 				sh '''#!/bin/bash
-				curl -Is http://localhost:32600 | head -n 1 > /tmp/uat-result-file
-				status=`/tmp/uat-result-file`
+				whoami;
+				pwd;
+				curl -Is http://localhost:32600 | head -n 1 > /tmp/uat-result-file;
+				status=`/tmp/uat-result-file`;
 				if [[ "$status" == "HTTP/1.1 200 OK" ]]; then
-				   echo "Opr-S1-${MY_POLITEID}: uat svr is running after update"
+				   echo "Opr-S1-${MY_POLITEID}: uat svr is running after update";
 				else
-				   echo "Opr-S1-${MY_POLITEID}: uat svr fails after update and is rolled back"
+				   echo "Opr-S1-${MY_POLITEID}: uat svr fails after update and is rolled back";
 				fi
 				'''
 			}

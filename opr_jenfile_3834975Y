@@ -131,16 +131,10 @@ pipeline {
 					if (theChoice == 'Proceed to further system health check') {
 						echo "Opr-S7-${MY_POLITEID}: Proceed to further system health check";
 					} else if (theChoice == 'Release prod web server to production') {
-						echo "prod web server is updated and ready"
+						echo "Opr-S7-${MY_POLITEID}: prod web server is updated and ready";
 					}
 				}
 			}
 		}
 	}
-}
-
-
-// Reusable function to perform rollback
-def rollback() {
-	echo "${MY_POLITEID}-rolling back..."
 }

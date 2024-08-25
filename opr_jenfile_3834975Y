@@ -42,11 +42,14 @@ pipeline {
 			steps {
 				sh '''#!/bin/bash
 				curl -Is http://localhost:32600 2>/dev/null | head -n 1 > /tmp/uat-result-file;
-				cat /tmp/uat-result-file;
 				status=$(cat /tmp/uat-result-file);
-				if [[ "$status" == *"200"* ]]; then
+				if [[ "$status" == *"400"* ]]; then
 					echo "Opr-S2-${MY_POLITEID}: uat svr is running after update";
 				else
+					docker rm -f uat_3834975y;
+
+					docker run -d --privileged -it --network oprnetwork -h uat_3834975y.localdomain --name uat_3834975y --add-host=sddo-vm.localdomain:172.20.113.112  --ip=192.168.30.110 -p 32600:80 img-puppetclient /sbin/init
+
 					echo "Opr-S2-${MY_POLITEID}: uat svr fails after update and is rolled back";
 				fi
 				'''

@@ -18,7 +18,6 @@ pipeline {
 	stages {
 		stage('Opr-S1-3834975Y') {
 			steps {
-/* temp disable
 				sh 'docker image rm -f bkup_uat_image'
 
 				sh 'docker commit uat_3834975y bkup_uat_image'
@@ -33,7 +32,7 @@ pipeline {
 				locate_script='/tmp/3834975Y/work/operate-repo-3834975Y/script_3834975Y';
 				bolt script run $locate_script -t $targets -u clientadm -p admin123 --no-host-key-check --run-as root;
 				'''
-*/
+
 				echo "Opr-S1-${MY_POLITEID}: uat web server is backup and updated"
 			}
 		}
@@ -48,7 +47,7 @@ pipeline {
 				else
 					docker rm -f uat_3834975y;
 
-					docker run -d --privileged -it --network oprnetwork -h uat_3834975y.localdomain --name uat_3834975y --add-host=sddo-vm.localdomain:172.20.113.112  --ip=192.168.30.110 -p 32600:80 img-puppetclient /sbin/init
+					docker run -d --privileged -it --network oprnetwork -h uat_3834975y.localdomain --name uat_3834975y --add-host=sddo-vm.localdomain:172.20.113.112 --ip=192.168.30.110 -p 32600:80 bkup_uat_image /sbin/init
 
 					echo "Opr-S2-${MY_POLITEID}: uat svr fails after update and is rolled back";
 				fi
@@ -82,19 +81,59 @@ pipeline {
 
 		stage('Opr-S5-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 5: xxxx"
+				sh 'docker image rm -f bkup_prod_image'
+
+				sh 'docker commit prod_3834975y bkup_prod_image'
+
+				sh '''#!/bin/bash
+				puppet resource file /tmp/3834975Y/ ensure=absent force=true;
+				puppet resource file /tmp/3834975Y/ ensure=directory recurse=true;
+				puppet resource file /tmp/3834975Y/work/ ensure=directory recurse=true;
+				cd /tmp/3834975Y/work;
+				git clone https://github.com/wesley-if/operate-repo-3834975Y.git;
+				targets=prod_3834975y;
+				locate_script='/tmp/3834975Y/work/operate-repo-3834975Y/script_3834975Y';
+				bolt script run $locate_script -t $targets -u clientadm -p admin123 --no-host-key-check --run-as root;
+				'''
+
+				echo "Opr-S5-${MY_POLITEID}: prod web server is backup and updated"
 			}
 		}
 
 		stage('Opr-S6-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 6: xxxx"
+				sh '''#!/bin/bash
+				curl -Is http://localhost:32700 2>/dev/null | head -n 1 > /tmp/prod-result-file;
+				status=$(cat /tmp/prod-result-file);
+				if [[ "$status" == *"200"* ]]; then
+					echo "Opr-S6-${MY_POLITEID}: prod web svr is running after update";
+				else
+					docker rm -f prod_3834975y;
+
+					docker run -d --privileged -it --network oprnetwork -h prod_3834975y.localdomain --name prod_3834975y --add-host=sddo-vm.localdomain:172.20.113.112 --ip=192.168.30.220 -p 32700:80 bkup_prod_image /sbin/init
+
+					echo "Opr-S6-${MY_POLITEID}: prod web svr fails after update and is rolled back";
+				fi
+				'''
 			}
 		}
 
 		stage('Opr-S7-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 7: xxxx"
+				script {
+					theChoice = input (
+						message: 'Action',
+						parameters: [choice(name:'',choices: ['Proceed to further system health check', 'Release prod web server to production'])]
+					)
+				}
+
+				script {
+					if (theChoice == 'Proceed to further system health check') {
+						echo "Opr-S7-${MY_POLITEID}: Proceed to further system health check";
+					} else if (theChoice == 'Release prod web server to production') {
+						echo "prod web server is updated and ready"
+					}
+				}
 			}
 		}
 	}

@@ -37,13 +37,23 @@ pipeline {
 			}
 		}
 
-
-
 		stage('Opr-S2-3834975Y') {
 			steps {
-				echo "${MY_POLITEID}-Stage 2: Setup Release Environment Completed."
+				sh 'curl -s -o /dev/null -w "%{http_code}" http://localhost:32600'
+				script {
+					def responseCode = sh(script: 'cat /dev/null', returnStdout: true).trim()
+					if (responseCode == '200') {
+						echo "Opr-S1-${MY_POLITEID}: uat svr is running after update"
+					} else {
+						echo "Opr-S1-${MY_POLITEID}: uat svr fails after update and is rolled back"
+					}
+				}
 			}
 		}
+
+
+
+
 
 		stage('Opr-S3-3834975Y') {
 			steps {

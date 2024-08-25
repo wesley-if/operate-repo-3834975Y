@@ -44,6 +44,7 @@ pipeline {
 				curl -Is http://localhost:32600 2>/dev/null | head -n 1 > /tmp/uat-result-file;
 				cat /tmp/uat-result-file;
 				status=`cat /tmp/uat-result-file`;
+				cat $status;
 				if [[ "$status" == "HTTP/1.1 200 OK" ]]; then
 					echo "Opr-S2-${MY_POLITEID}: uat svr is running after update";
 				else
